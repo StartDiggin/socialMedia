@@ -7,9 +7,8 @@ import PostCard from '../components/PostCard';
 
 
 function Home(){
-    const { loading, data: { getPosts: posts } }  = useQuery(FETCH_POSTS_QUERY);
+    const { loading, data: { getPosts: posts } = {}}  = useQuery(FETCH_POSTS_QUERY);
 
-    
     return(
        <Grid columns={3}>
             <Grid.Row className="page-title">
@@ -31,8 +30,8 @@ function Home(){
 }
 
 const FETCH_POSTS_QUERY = gql`
-    {
-        getPosts{
+{
+    getPosts{
         id 
         body 
         createdAt 
@@ -49,7 +48,7 @@ const FETCH_POSTS_QUERY = gql`
             body
         }
     }
-    }
+}
 `;
 
 

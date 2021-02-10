@@ -1,40 +1,40 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Form } from 'semantic-ui-react';
 import { useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 
+import { AuthContext } from '../context/auth';
+
+// custom Hooks
+import { useForm } from '../util/hooks';
+
 
 
 function Register(props){
+    const context = useContext(AuthContext);
     const [errors, setErrors ] = useState({});
-    const [values, setValues] = useState({
+
+    const { onChange, onSubmit, values } = useForm(registerUser, {
         username: '',
         email: '',
         password: '',
         confirmPassword: ""
     })
 
-    const onChange = (e) => {
-        setValues({ ...values, [e.target.name]: e.target.value});
-    }
-
-    const [addUser, { loading}] = useMutation(REGISTER_USER, {
-        update(_, result){
-            console.log(result);
-            // props.history.push('/');
+    const [addUser, { loading }] = useMutation(REGISTER_USER, {
+        update(_, {data: { register: userData}}){
+            context.login(userData);
+            props.history.push('/');
         },
         onError(err){
-            console.log(err.graphQLErrors[0].extensions.exception.errors)
             setErrors(err.graphQLErrors[0].extensions.exception.errors);
         },
         variables: values
-    })
+    });
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-        addUser()
-    }
-
+    function registerUser(){
+        addUser();
+    };
     
 
     return(
