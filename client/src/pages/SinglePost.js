@@ -14,23 +14,16 @@ function SinglePost(props){
     const postId = Id;
 
     const { user } = useContext(AuthContext);
-    
-    // const { loading, data: { getPosts: posts } = {}}  = useQuery(FETCH_POSTS_QUERY);
-
-    const { data } = useQuery(FETCH_POST_QUERY, {
+   
+    const { data : { getPost } = {}}  = useQuery(FETCH_POST_QUERY, {
         variables: {
-            postId: Id
+            postId
         }
-    });
+    })
 
-
-    console.log(data)
-    const getPost = data;
-    // const { data : { getPost } = {}} = useQuery(FETCH_POST_QUERY, {
-    //     variables: {
-    //         postId
-    //     }
-    // })
+    function deletePostCallback(){
+        props.history.push('/');
+    }
 
     
     let postMarkup;
@@ -72,8 +65,8 @@ function SinglePost(props){
                                     </Label>
                                </Button>
                                {user && user.username === username && (
-                                   <DeleteButton postId ={id} />
-                               )}
+                                    <DeleteButton postId ={id} callback={deletePostCallback}/>
+                                )}
                            </Card.Content>
                        </Card>
                    </Grid.Column>

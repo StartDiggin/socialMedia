@@ -15,9 +15,9 @@ module.exports = {
                 throw new Error(err);
             }
         },
-        async getPost(_, { postID }){
+        async getPost(_, { postId }){
             try {
-                const post = await Post.findById(postID);
+                const post = await Post.findById(postId);
                 if(post){
                     return post;
                 } else {
@@ -51,7 +51,7 @@ module.exports = {
 
             return post;
         },
-        async deletePost(_, { postID }, context){
+        async deletePost(_, { postId }, context){
             const user = checkAuth(context);
 
             try{

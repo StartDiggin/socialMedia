@@ -12,6 +12,9 @@ function PostCard({ post: {body, createdAt, id, username, likeCount, commentCoun
 
     const { user } = useContext(AuthContext);
 
+    function reloadPage(){
+        window.location(true);
+    }
     
 
     return (
@@ -38,7 +41,7 @@ function PostCard({ post: {body, createdAt, id, username, likeCount, commentCoun
                         {commentCount}
                     </Label>
                 </Button>
-                {user && user.username === username && <DeleteButton postId={id} />}
+                {user && user.username === username && <DeleteButton postId={id} callback={reloadPage} />}
             </Card.Content>
         </Card>
     )
