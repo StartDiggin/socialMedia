@@ -10,11 +10,11 @@ import DeleteButton from './DeleteButton';
 
 function PostCard({ post: {body, createdAt, id, username, likeCount, commentCount, likes}}){
 
-    const { user } = useContext(AuthContext);
+    const { user } = useContext(AuthContext); 
 
-    function reloadPage(){
-        window.location(true);
-    }
+    // const deletePostCallback = (props) => {
+    //      props.history.push('/');
+    // }
     
 
     return (
@@ -41,7 +41,7 @@ function PostCard({ post: {body, createdAt, id, username, likeCount, commentCoun
                         {commentCount}
                     </Label>
                 </Button>
-                {user && user.username === username && <DeleteButton postId={id} callback={reloadPage} />}
+                {user && user.username === username && <DeleteButton postId={id} />}
             </Card.Content>
         </Card>
     )
