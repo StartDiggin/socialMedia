@@ -7,15 +7,13 @@ import { AuthContext } from '../context/auth';
 import LikeButton from './LikeButton';
 import DeleteButton from './DeleteButton';
 
+import MyPopup from '../util/MyPopup';
+
 
 function PostCard({ post: {body, createdAt, id, username, likeCount, commentCount, likes}}){
 
     const { user } = useContext(AuthContext); 
 
-    // const deletePostCallback = (props) => {
-    //      props.history.push('/');
-    // }
-    
 
     return (
         <Card fluid>
@@ -33,19 +31,21 @@ function PostCard({ post: {body, createdAt, id, username, likeCount, commentCoun
                 {/* Like button  */}
                 <LikeButton user={user} post={{ id, likes, likeCount}}/>
                 {/* Comment button  */}
-                 <Button labelPosition='right' as={Link} to={`/posts/${id}`}>
-                    <Button color='blue' basic>
-                        <Icon name='comments' />
+                <MyPopup content="Comment on post">
+                     <Button labelPosition='right' as={Link} to={`/posts/${id}`}>
+                        <Button color='blue' basic>
+                            <Icon name='comments' />
+                        </Button>
+                        <Label basic color='blue' pointing='left'>
+                            {commentCount}
+                        </Label>
                     </Button>
-                    <Label basic color='blue' pointing='left'>
-                        {commentCount}
-                    </Label>
-                </Button>
+                </MyPopup>
+                {/* checks for user  */}
                 {user && user.username === username && <DeleteButton postId={id} />}
             </Card.Content>
         </Card>
     )
-
 }
 
 export default PostCard;

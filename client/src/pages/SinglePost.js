@@ -1,12 +1,14 @@
 import React, { useContext, useState, useRef } from 'react';
 import gql from 'graphql-tag';
 import { useQuery, useMutation }  from '@apollo/react-hooks';
-import { Button, Card, Form, Icon, Image, Grid, Label, CommentActions, CommentMetadata } from 'semantic-ui-react';
 import moment from 'moment';
+import { Button, Card, Form, Icon, Image, Grid, Label } from 'semantic-ui-react';
 
 import { AuthContext } from '../context/auth';
 import LikeButton from '../components/LikeButton';
 import DeleteButton from '../components/DeleteButton';
+
+import MyPopup from '../util/MyPopup';
 
 
 function SinglePost(props){
@@ -64,11 +66,12 @@ function SinglePost(props){
 
                            <Card.Content extra>
                                <LikeButton user={user} post={{ id, likeCount, likes }} />
-                               <Button 
-                                as="div"
-                                labelPosition="right"
-                                onClick={() => console.log("Comment on post")}
-                                >
+                               <MyPopup content="Comment on post">
+                                   <Button 
+                                        as="div"
+                                        labelPosition="right"
+                                        onClick={() => console.log("Comment on post")}
+                                        >
                                     <Button basic color="blue">
                                         <Icon name="comments" />
                                     </Button>
@@ -76,6 +79,7 @@ function SinglePost(props){
                                         {commentCount}
                                     </Label>
                                </Button>
+                               </MyPopup>
                                {user && user.username === username && (
                                     <DeleteButton postId={id} callback={deletePostCallback}/>
                                 )}
@@ -110,7 +114,7 @@ function SinglePost(props){
                                 <Card fluid key={comment.id}>
                                     <Card.Content>
                                         {user && user.username === comment.username && (
-                                            <DeleteButton postId={id} commentId={comment.id} />
+                                            <DeleteButton postId={id} commentId={comment.id} callback={deletePostCallback} />
                                         )}
                                         <Card.Header>{comment.username}</Card.Header>
                                         <Card.Meta>{moment(comment.createdAt).fromNow()}</Card.Meta>

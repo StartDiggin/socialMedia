@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-
-import { useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
+import { useMutation } from '@apollo/react-hooks';
 
 import { Button, Confirm, Icon } from 'semantic-ui-react';
 import { FETCH_POSTS_QUERY } from '../util/graphql';
+
+import MyPopup from '../util/MyPopup';
 
 
 
@@ -15,16 +16,17 @@ function DeleteButton({ postId, commentId, callback }){
     const mutation = commentId ? DELETE_COMMENT_MUTATION : DELETE_POST_MUTATION;
 
     const [ deletePostOrMutation ] = useMutation(mutation, {
+        refetchQueries: [{ query: FETCH_POSTS_QUERY}],
         update(proxy){
             setConfirmOpen(false);
           
-            if(!commentId){
-                const data = proxy.readQuery({
-                query: FETCH_POSTS_QUERY
-                });
-                data.getPosts = data.getPosts.filter((p) => p.id !== postId);
-                proxy.writeQuery({ query: FETCH_POSTS_QUERY, data });
-            }
+            // if(!commentId){
+            //     // const data = proxy.readQuery({
+            //     // query: FETCH_POSTS_QUERY
+            //     // });
+            //     // data.getPosts = data.getPosts.filter((p) => p.id !== postId);
+            //     // proxy.writeQuery({ query: FETCH_POSTS_QUERY, data });
+            // }
 
             if(callback) callback();
         },
@@ -36,14 +38,17 @@ function DeleteButton({ postId, commentId, callback }){
 
     return(
         <>
-        <Button
-            as="div"
-            color="red"
-            floated="right"
-            onClick={() => setConfirmOpen(true)}
-        >
-            <Icon name="trash" style={{ margin: 0 }} />
-        </Button>
+        <MyPopup content={commentId ? 'Delete comment' : 'Delete post'}>
+             <Button
+                as="div"
+                color="red"
+                floated="right"
+                onClick={() => setConfirmOpen(true)}
+                >
+                <Icon name="trash" style={{ margin: 0 }} />
+            </Button>
+        </MyPopup>
+
         <Confirm
             open={confirmOpen}
             onCancel={() => setConfirmOpen(false)}
